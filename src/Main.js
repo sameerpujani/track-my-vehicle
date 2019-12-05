@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './App.css';
 import MapComponent from './MapComponent';
 
 export default class Main extends Component {
 state = {
     vehicles: [
-      { id: 1, title: 'Mercedes truck', number: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 4, color: 'orange' },
-      { id: 2, title: 'WagonR 2978', number: '', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'yellow' },
-      { id: 3, title: 'Mercedes truck', number: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'red' },
-      { id: 4, title: 'Mercedes truck', number: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'pink' },
-      { id: 5, title: 'Mercedes truck', number: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'pink' },
-      { id: 6, title: 'Mercedes truck', number: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'pink' },
-      { id: 7, title: 'Mercedes truck', number: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'red' },
-      { id: 8, title: 'Mercedes truck', number: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 1, color: 'blue' }
+      { id: 1, title: 'Mercedes truck', sub: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 4, color: 'orange' },
+      { id: 2, title: 'WagonR 2978', sub: '', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'yellow' },
+      { id: 3, title: 'UP80 CJ 70 8814', sub: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'red' },
+      { id: 4, title: 'WagonR 3078', sub: 'UK07 0112', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'pink' },
+      { id: 5, title: 'Mercedes truck', sub: 'UK07 1234', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'pink' },
+      { id: 6, title: 'Mercedes truck', sub: 'UK07 0218', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'pink' },
+      { id: 7, title: 'UP80 cd 8080', sub: '', center: { lat: 59.95, lng: 30.33 }, inbox: 0, color: 'red' },
+      { id: 8, title: 'UP80 cd 8080 ', sub: '', center: { lat: 59.95, lng: 30.33 }, inbox: 1, color: 'blue' }
     ],
     selectedVehicle: {
       center: {
@@ -23,7 +24,6 @@ state = {
   }
 
   handleClick = (event) => {
-    // event.preventDefault();
 
     let lat = event.currentTarget.dataset.lat;
     let lng = event.currentTarget.dataset.lng;
@@ -35,31 +35,48 @@ state = {
           lng
         }
       }
-    })
-    console.log('lat', lat);
-    console.log('lng', lng);
-    console.log('call0', event.detail)
+    });
   }
 
   render() {
     return (
-        // Important! Always set the container height explicitly
         <div style={{ height: '100vh', width: '100%' }}>
-            <MapComponent
-                zoom={11}
-                setcenter={this.state.selectedVehicle.center}
-            />
-            <div className="ui left fixed vertical menu">
-                <div className="item">
-                    <img className="ui mini image" src={""} />
+          <div className="ui bottom attached segment pushable">
+            <div className="ui visible left vertical sidebar menu">
+              
+              <div className=" active ui fluid category search item">
+                <div className="ui icon input">
+                  <input className="prompt" type="text" placeholder="Search" />
+                  <i className="search icon"></i>
                 </div>
-                <Link to="/track/1" className="active teal item" data-id={this.state.vehicles[0].id} data-lat={12.9716} data-lng={77.5946} onClick={this.handleClick}>
-                    Inbox
-                    <div className="ui teal tiny label">1</div>
-                </Link>
-                <Link to="/track/2" className="item" data-lat={31.1471} data-lng={75.3412} onClick={this.handleClick}>Testimonials</Link>
-                <Link to="/track/3" className="item" data-lat={37.0902} data-lng={95.7129} onClick={this.handleClick}>Sign-in</Link>
+              </div>
+              <div class="list-style ">
+              {this.state.vehicles.map((veh, index) => {
+                return (
+                  <Link
+                    style={{color: veh.color}}
+                    key={veh.id}
+                    to={`/track/${veh.id}`}
+                    className="item"
+                    data-id={veh.id}
+                    data-lat={veh.center.lat}
+                    data-lng={veh.center.lng}
+                    onClick={this.handleClick}
+                  >
+                    <span style={{color: 'rgba(0,0,0,.87)'}}>{veh.title}</span>
+                    <span style={{color: 'rgba(0,0,0,.5)'}}>{veh.sub ? ` ${veh.sub}` : ''}</span>
+                    {veh.inbox ? <div className={`ui ${veh.color} tiny label`}>{veh.inbox}</div> : ''}
+                  </Link>
+                );
+              })}
+              </div>
             </div>
+              <MapComponent
+                  zoom={11}
+                  setcenter={this.state.selectedVehicle.center}
+              />
+              dshflk
+          </div>
         </div>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 
-const AnyReactComponent = ({ text }) => <div><img style={{ width: '80px' }} src={"http://www.roadrunnercr.com/assets/images/map-marker.png"} /></div>;
+const AnyReactComponent = ({ text }) => <div><img alt="marker" style={{ width: '80px' }} src={"http://www.roadrunnercr.com/assets/images/map-marker.png"} /></div>;
 
 export default class MapComponent extends Component {
     static defaultProps = {
@@ -12,22 +12,21 @@ export default class MapComponent extends Component {
         zoom: 11
     };
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            center: this.props.center,
+            zoom: this.props.zoom
+        };
+    }
+
     handleApiLoaded = (map, maps) => {
         console.log('map', this.props.setcenter);
         
         map.setCenter( this.props.setcenter )
         console.log('maps', maps);
 
-        this.googleMapRef = map
-    this.googleRef = maps
-
-        let locations = [
-            {lat: -31.563910, lng: 147.154312},
-            {lat: -33.718234, lng: 150.363181},
-            {lat: -33.727111, lng: 150.371124}]
-          let markers = locations && locations.map((location) => {
-            return new this.googleRef.Marker({position: location})
-          })
     }
 
     render() {
@@ -35,14 +34,14 @@ export default class MapComponent extends Component {
         return (
             <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyBtYLx7DcZg3e0Tz6EwU5BAiR04YAwk25I" }}
-                defaultCenter={this.props.center}
-                defaultZoom={this.props.zoom}
+                defaultCenter={this.state.center}
+                defaultZoom={this.state.zoom}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
             >
             <AnyReactComponent
-                lat={this.props.center.lat}
-                lng={this.props.center.lng}
+                lat={this.state.center.lat}
+                lng={this.state.center.lng}
                 text="My Marker"
             />
             </GoogleMapReact>
